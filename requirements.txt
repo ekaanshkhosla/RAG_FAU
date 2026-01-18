@@ -1,0 +1,44 @@
+# API
+fastapi==0.115.6
+uvicorn==0.34.0
+python-dotenv==1.0.1
+python-multipart==0.0.21
+
+
+
+# RAG / LLM
+openai==2.14.0
+litellm==1.80.11
+tiktoken==0.12.0
+langchain==1.2.0
+langchain-community==0.4.1
+langchain-core==1.2.5
+langchain-openai==1.1.6
+langgraph==1.0.5
+langsmith==0.5.1
+
+
+
+# Vector DB
+chromadb==1.4.0
+
+
+
+# Parsing / data
+numpy==2.4.0
+scikit-learn==1.8.0
+scipy==1.16.3
+pdfminer.six==20251107
+pdfplumber==0.11.8
+beautifulsoup4==4.14.3
+lxml==6.0.2
+
+
+
+# Networking / utils
+httpx==0.28.1
+aiohttp==3.13.2
+orjson==3.11.5
+tenacity==9.1.2
+backoff==2.2.1
+rich==14.2.0 
