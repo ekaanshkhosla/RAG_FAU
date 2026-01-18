@@ -61,7 +61,10 @@ pip install -e .
 uvicorn app.main:app --reload
 ```
 
-
+### 5. Open the application in your browser at:
+```bash
+http://127.0.0.1:8000/
+```
 
 
 
