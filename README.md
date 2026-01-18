@@ -43,3 +43,27 @@ The RAG chatbot aims to address both problems by offering an intelligent, centra
 ```bash
 git clone <your-repository-url>
 cd <your-repository-name>
+```
+
+### 2. Create and Activate Conda Environment
+```bash
+conda create -n rag_test python=3.11 -y
+conda activate rag_test
+```
+
+### 3. Install the Application
+```bash
+pip install -e .
+```
+
+### 4. Run the Application
+```bash
+uvicorn app.main:app --reload
+```
+
+
+
+
+
+
+
