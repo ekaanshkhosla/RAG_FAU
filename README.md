@@ -41,8 +41,8 @@ The RAG chatbot aims to address both problems by offering an intelligent, centra
 
 ### 1. Clone the Repository
 ```bash
-git clone <your-repository-url>
-cd <your-repository-name>
+git clone https://github.com/ekaanshkhosla/RAG_FAU.git
+cd RAG_FAU
 ```
 
 ### 2. Create and Activate Conda Environment
