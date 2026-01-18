@@ -35,7 +35,6 @@ The RAG chatbot aims to address both problems by offering an intelligent, centra
 - **Design** a RAG-based chatbot system that integrates public (websites, PDFs) and private (anonymized emails) data sources.
 - **Develop** a retrieval pipeline that efficiently indexes and fetches relevant information using vector-based search and contrastive learning.
 - **Deploy** a generative model (LLM) to generate accurate and coherent responses grounded in retrieved content.
-- **Evaluate** system performance using both manual inspection and automated metrics such as [RAGAS](https://huggingface.co/spaces/RAGAS/ragas-space).
 
 ## Installation & Setup
 
