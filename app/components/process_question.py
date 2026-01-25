@@ -1,10 +1,15 @@
 from app.config.config import MODEL
 from litellm import completion
 from app.components.get_relevant_chunks import get_relevant_chunks
+from app.utils.logger import get_logger
 
+logger = get_logger(__name__)
 
 
 def rewrite_query(question):
+
+    logger.info("Rewriting query for better retrieval....")
+
     """Rewrite the user's question to be a more specific question that is more likely to surface relevant content in the Knowledge Base."""
     message = f"""
 You are in a conversation with a user, answering questions about the study advisory for the Department of Data Science at FAU Erlangen.
@@ -26,6 +31,8 @@ IMPORTANT: Respond ONLY with the knowledge base search query, nothing else.
 
 
 def make_rag_messages(question, chunks):
+
+    logger.info("Giving answer based on retrieved context...")
 
     SYSTEM_PROMPT = """
     You are a knowledgeable, friendly assistant representing the study advisory for the Department of Data Science at FAU Erlangen.

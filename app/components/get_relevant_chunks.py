@@ -6,9 +6,15 @@ from chromadb import PersistentClient
 from app.config.config import DB_NAME, collection_name, openai, embedding_model
 from app.components.schemas import Result, RankOrder
 from app.components.chroma_store import get_collection
+from app.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 def rerank(question, chunks):
+
+    logger.info("Ordering the chunks by relevance to the question asked...")
+
     system_prompt = """
 You are a document re-ranker.
 You are provided with a question and a list of relevant chunks of text from a query of a knowledge base.
@@ -34,9 +40,8 @@ Reply only with the list of ranked chunk ids, nothing else. Include all the chun
 
 
 def fetch_context_unranked(query):
-    print("loading chroma DB")
     collection = get_collection()
-    print("querying chroma DB")
+    logger.info("Querying chroma DB...")
     results = collection.query(query_embeddings=[query], n_results=RETRIEVAL_K)
     chunks = []
     for result in zip(results["documents"][0], results["metadatas"][0]):
@@ -47,7 +52,7 @@ def fetch_context_unranked(query):
 
 
 def get_relevant_chunks(question):
-    print(question)
+    logger.info("Getting relevant chunks from chroma DB...")
     query = openai.embeddings.create(model=embedding_model, input=[question]).data[0].embedding
     chunks = fetch_context_unranked(query)
     ranked_chunks =  rerank(question, chunks)

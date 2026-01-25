@@ -4,7 +4,9 @@ from app.config.config import AVERAGE_CHUNK_SIZE
 from app.config.config import MODEL
 from tqdm import tqdm
 from app.components.schemas import Chunks
+from app.utils.logger import get_logger
 
+logger = get_logger(__name__)
 
 
 def fetch_documents():
@@ -83,6 +85,7 @@ def process_document(document):
 
 
 def create_chunks():
+    logger.info("Creating Chunks...")
     documents = fetch_documents()
     chunks = []
     for doc in tqdm(documents):

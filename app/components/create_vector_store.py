@@ -4,7 +4,9 @@ from app.config.config import DB_NAME, MODEL, openai, embedding_model, RETRIEVAL
 from chromadb import PersistentClient
 from app.config.config import DB_NAME, collection_name, openai, embedding_model
 from pathlib import Path
+from app.utils.logger import get_logger
 
+logger = get_logger(__name__)
 
 def create_embeddings():
 
@@ -16,7 +18,7 @@ def create_embeddings():
 
     """
 
-    print("🔹 Creating embeddings...")
+    logger.info("Creating embeddings...")
     chunks = create_chunks()
     chroma = PersistentClient(path=DB_NAME)
 
@@ -34,6 +36,6 @@ def create_embeddings():
     metas = [chunk.metadata for chunk in chunks]
 
     collection.add(ids=ids, embeddings=vectors, documents=texts, metadatas=metas)
-    print(f"Vectorstore created with {collection.count()} documents")
+    logger.info(f"Vectorstore created with {collection.count()} documents")
 
     return collection 

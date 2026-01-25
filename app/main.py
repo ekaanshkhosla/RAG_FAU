@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.config.config import DB_NAME, collection_name
 from app.components.process_question import answer_question
-from app.components.chroma_store import init_chroma  # ✅
+from app.components.chroma_store import init_chroma
 
 app = FastAPI()
 

@@ -2,6 +2,9 @@
 
 from chromadb import PersistentClient
 from app.components.create_vector_store import create_embeddings
+from app.utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 client = None
 collection = None
@@ -26,11 +29,10 @@ def init_chroma(db_path: str, collection_name: str, create_embeddings_fn=None):
     count = collection.count()
 
     if count == 0:
-        print("⚠️ Chroma collection is empty. Creating embeddings...")
+        logger.info("⚠️ Chroma collection is empty. Creating embeddings...")
         collection = create_embeddings()
     else:
-        print(f"✅ Chroma collection loaded with {count} documents.")
-
+        logger.info(f"✅ Chroma collection loaded with {count} documents.")
 
 
 
