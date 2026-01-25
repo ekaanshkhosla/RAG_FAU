@@ -5,37 +5,49 @@ from chromadb import PersistentClient
 from app.config.config import DB_NAME, collection_name, openai, embedding_model
 from pathlib import Path
 from app.utils.logger import get_logger
+from app.utils.custom_exception import CustomException
+
 
 logger = get_logger(__name__)
 
 def create_embeddings():
-
     """
-
     Creates embeddings and stores them in Chroma.
-
-    Assumes it is called ONLY once (inside _collection_lock).
-
     """
+    try:
+        logger.info("Creating embeddings...")
 
-    logger.info("Creating embeddings...")
-    chunks = create_chunks()
-    chroma = PersistentClient(path=DB_NAME)
+        chunks = create_chunks()
 
-    if collection_name in [c.name for c in chroma.list_collections()]:
-        chroma.delete_collection(collection_name)
+        chroma = PersistentClient(path=DB_NAME)
 
+        # Reset collection if exists
+        try:
+            existing = [c.name for c in chroma.list_collections()]
+            if collection_name in existing:
+                chroma.delete_collection(collection_name)
+        except Exception as e:
+            logger.exception("Failed while checking/deleting existing Chroma collection.")
+            raise CustomException("Failed to reset Chroma collection", e)
 
-    texts = [chunk.page_content for chunk in chunks]
-    emb = openai.embeddings.create(model=embedding_model, input=texts).data
-    vectors = [e.embedding for e in emb]
+        texts = [chunk.page_content for chunk in chunks]
+        metas = [chunk.metadata for chunk in chunks]
+        ids = [str(i) for i in range(len(chunks))]
 
-    collection = chroma.get_or_create_collection(collection_name)
+        if not texts:
+            raise ValueError("No chunks found to embed")
 
-    ids = [str(i) for i in range(len(chunks))]
-    metas = [chunk.metadata for chunk in chunks]
+        emb = openai.embeddings.create(model=embedding_model, input=texts).data
+        vectors = [e.embedding for e in emb]
 
-    collection.add(ids=ids, embeddings=vectors, documents=texts, metadatas=metas)
-    logger.info(f"Vectorstore created with {collection.count()} documents")
+        collection = chroma.get_or_create_collection(collection_name)
+        collection.add(ids=ids, embeddings=vectors, documents=texts, metadatas=metas)
 
-    return collection 
+        logger.info(f"Vectorstore created with {collection.count()} documents")
+        return collection
+
+    except CustomException:
+        raise
+    except Exception as e:
+        logger.exception("Failed to create vector store embeddings.")
+        raise CustomException("Vector store creation failed", e)
